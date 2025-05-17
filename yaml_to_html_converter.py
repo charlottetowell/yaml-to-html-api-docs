@@ -104,12 +104,98 @@ class APISpecConverter:
             </ul>
         </div>"""
 
+    def organize_endpoints_by_tag(self) -> Dict[str, list]:
+        """Organize endpoints by their tags"""
+        tag_endpoints = {}
+        endpoints = self.extract_endpoints()
+        
+        # Initialize tags with empty lists
+        for tag in self.extract_tags():
+            tag_endpoints[tag['name']] = []
+        
+        # Group endpoints by tag
+        for path, methods in endpoints.items():
+            for method, details in methods.items():
+                endpoint_info = {
+                    'path': path,
+                    'method': method.upper(),
+                    'summary': details['summary'],
+                    'description': details['description']
+                }
+                
+                # Add to each tag this endpoint belongs to
+                for tag in details['tags']:
+                    if tag in tag_endpoints:
+                        tag_endpoints[tag].append(endpoint_info)
+        
+        return tag_endpoints
+
+    def generate_endpoint_sections(self, tag_endpoints: Dict[str, list]) -> str:
+        """Generate HTML for all endpoint sections"""
+        sections = []
+        
+        for tag, endpoints in tag_endpoints.items():
+            endpoints_html = '\n'.join([
+                f'''            <div class="endpoint-preview">
+                <span class="endpoint-method method method-{endpoint['method'].lower()}">{endpoint['method']}</span>
+                <span class="endpoint-path">{endpoint['path']}</span>
+                <span class="endpoint-description">{endpoint['description'] or endpoint['summary']}</span>
+            </div>''' for endpoint in endpoints
+            ])
+            
+            sections.append(f'''
+        <section id="tag-{tag.lower()}" class="tag-section">
+            <div class="tag-section-marker" data-tag="{tag}"></div>
+            <h2 class="tag-section-title">{tag}</h2>
+{endpoints_html}
+        </section>''')
+        
+        return '\n'.join(sections)
+
+    def generate_intersection_observer_js(self) -> str:
+        """Generate JavaScript for intersection observer and smooth scrolling"""
+        return """
+    <script>
+        // Intersection Observer for tag highlighting
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const tag = entry.target.dataset.tag;
+                    document.querySelectorAll('.tag-item').forEach(item => {
+                        item.classList.remove('active');
+                        if (item.dataset.tag === tag) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, {
+            threshold: 1.0,
+            rootMargin: '-100px 0px -90% 0px'
+        });
+
+        // Observe all section markers
+        document.querySelectorAll('.tag-section-marker').forEach(marker => {
+            observer.observe(marker);
+        });
+
+        // Click handlers for tag items
+        document.querySelectorAll('.tag-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const tag = item.dataset.tag;
+                const section = document.getElementById(`tag-${tag.toLowerCase()}`);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>"""
+
     def generate_html(self, output_path: str) -> None:
         """Generate HTML documentation from the parsed API spec"""
         api_info = self.extract_api_info()
         tags = self.extract_tags()
-        endpoints = self.extract_endpoints()
-        security = self.extract_security_definitions()
+        tag_endpoints = self.organize_endpoints_by_tag()
 
         # Generate HTML structure
         html_content = f"""<!DOCTYPE html>
@@ -129,9 +215,10 @@ class APISpecConverter:
                 <p class="api-description">{api_info['description']}</p>
                 <div class="api-base-url">{api_info['base_url']}</div>
             </div>
-            <!-- Endpoint content will be added here in future updates -->
+{self.generate_endpoint_sections(tag_endpoints)}
         </main>
     </div>
+{self.generate_intersection_observer_js()}
 </body>
 </html>"""
 

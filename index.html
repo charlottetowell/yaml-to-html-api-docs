@@ -32,8 +32,119 @@
                 <p class="api-description">API for managing chocolate products, orders, and factory operations</p>
                 <div class="api-base-url">api.charlotteschocolatefactory.com/v1</div>
             </div>
-            <!-- Endpoint content will be added here in future updates -->
+
+        <section id="tag-chocolates" class="tag-section">
+            <div class="tag-section-marker" data-tag="CHOCOLATES"></div>
+            <h2 class="tag-section-title">CHOCOLATES</h2>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-get">GET</span>
+                <span class="endpoint-path">/chocolates</span>
+                <span class="endpoint-description">Returns a paginated list of chocolate products</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-options">OPTIONS</span>
+                <span class="endpoint-path">/chocolates</span>
+                <span class="endpoint-description">Returns the allowed HTTP methods and other CORS headers</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-post">POST</span>
+                <span class="endpoint-path">/chocolates</span>
+                <span class="endpoint-description">Add a new chocolate product to the catalog</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-get">GET</span>
+                <span class="endpoint-path">/chocolates/{chocolateId}</span>
+                <span class="endpoint-description">Returns details of a specific chocolate product</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-put">PUT</span>
+                <span class="endpoint-path">/chocolates/{chocolateId}</span>
+                <span class="endpoint-description">Update chocolate product</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-patch">PATCH</span>
+                <span class="endpoint-path">/chocolates/{chocolateId}</span>
+                <span class="endpoint-description">Partially update chocolate product</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-delete">DELETE</span>
+                <span class="endpoint-path">/chocolates/{chocolateId}</span>
+                <span class="endpoint-description">Delete chocolate product</span>
+            </div>
+        </section>
+
+        <section id="tag-orders" class="tag-section">
+            <div class="tag-section-marker" data-tag="ORDERS"></div>
+            <h2 class="tag-section-title">ORDERS</h2>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-post">POST</span>
+                <span class="endpoint-path">/orders</span>
+                <span class="endpoint-description">Create a new order</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-get">GET</span>
+                <span class="endpoint-path">/orders/{orderId}</span>
+                <span class="endpoint-description">Get order details</span>
+            </div>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-get">GET</span>
+                <span class="endpoint-path">/users/{userId}/orders</span>
+                <span class="endpoint-description">Get user's order history</span>
+            </div>
+        </section>
+
+        <section id="tag-users" class="tag-section">
+            <div class="tag-section-marker" data-tag="USERS"></div>
+            <h2 class="tag-section-title">USERS</h2>
+            <div class="endpoint-preview">
+                <span class="endpoint-method method method-get">GET</span>
+                <span class="endpoint-path">/users/{userId}/orders</span>
+                <span class="endpoint-description">Get user's order history</span>
+            </div>
+        </section>
+
+        <section id="tag-inventory" class="tag-section">
+            <div class="tag-section-marker" data-tag="INVENTORY"></div>
+            <h2 class="tag-section-title">INVENTORY</h2>
+
+        </section>
         </main>
     </div>
+
+    <script>
+        // Intersection Observer for tag highlighting
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const tag = entry.target.dataset.tag;
+                    document.querySelectorAll('.tag-item').forEach(item => {
+                        item.classList.remove('active');
+                        if (item.dataset.tag === tag) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, {
+            threshold: 1.0,
+            rootMargin: '-100px 0px -90% 0px'
+        });
+
+        // Observe all section markers
+        document.querySelectorAll('.tag-section-marker').forEach(marker => {
+            observer.observe(marker);
+        });
+
+        // Click handlers for tag items
+        document.querySelectorAll('.tag-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const tag = item.dataset.tag;
+                const section = document.getElementById(`tag-${tag.toLowerCase()}`);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
