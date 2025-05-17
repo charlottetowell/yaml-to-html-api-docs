@@ -1,0 +1,179 @@
+:root {
+    /* Color Variables */
+    --primary-color: #2C3E50;
+    --secondary-color: #3498DB;
+    --accent-color: #E74C3C;
+    --background-color: #FFFFFF;
+    --sidebar-background: #F8F9FA;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C8D;
+    --border-color: #E0E0E0;
+    --method-get: #61AFFE;
+    --method-post: #49CC90;
+    --method-put: #FCA130;
+    --method-delete: #F93E3E;
+    --method-patch: #50E3C2;
+    --method-options: #7D3C98;
+    --method-head: #9B59B6;
+
+    /* Typography */
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    --font-size-base: 16px;
+    --font-size-small: 14px;
+    --font-size-large: 18px;
+    --font-size-xlarge: 24px;
+    --line-height: 1.5;
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Layout */
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --container-max-width: 1200px;
+    --border-radius: 4px;
+
+    /* Transitions */
+    --transition-speed: 0.3s;
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height);
+    color: var(--text-primary);
+    background-color: var(--background-color);
+}
+
+/* Layout Structure */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-background);
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+}
+
+.sidebar-header {
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.sidebar-title {
+    font-size: var(--font-size-large);
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tags-list {
+    list-style: none;
+}
+
+.tag-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+}
+
+.tag-item:hover {
+    background-color: var(--border-color);
+}
+
+.tag-item.active {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+/* Main Content Area */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: var(--spacing-xl);
+    flex: 1;
+}
+
+/* API Title and Description */
+.api-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.api-title {
+    font-size: var(--font-size-xlarge);
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.api-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.api-version {
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    font-size: var(--font-size-small);
+}
+
+/* HTTP Method Badges */
+.method {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.method-get { background-color: var(--method-get); }
+.method-post { background-color: var(--method-post); }
+.method-put { background-color: var(--method-put); }
+.method-delete { background-color: var(--method-delete); }
+.method-patch { background-color: var(--method-patch); }
+.method-options { background-color: var(--method-options); }
+.method-head { background-color: var(--method-head); }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+} 

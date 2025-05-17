@@ -68,34 +68,64 @@ class APISpecConverter:
         """Extract security definitions"""
         return self.spec_data.get('securityDefinitions', {})
 
+    def generate_sidebar_html(self, tags: list, api_info: Dict[str, Any]) -> str:
+        """Generate HTML for the sidebar with tags"""
+        tags_html = '\n'.join([
+            f'            <li class="tag-item" data-tag="{tag["name"]}">{tag["name"]}</li>'
+            for tag in tags
+        ])
+        
+        return f"""
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">API Documentation</h1>
+                <div class="api-version">Version {api_info['version']}</div>
+            </div>
+            <ul class="tags-list">
+{tags_html}
+            </ul>
+        </div>"""
+
     def generate_html(self, output_path: str) -> None:
         """Generate HTML documentation from the parsed API spec"""
-        # This is a placeholder for the HTML generation logic
-        # Will be implemented based on future styling and formatting requirements
         api_info = self.extract_api_info()
         tags = self.extract_tags()
         endpoints = self.extract_endpoints()
         security = self.extract_security_definitions()
 
-        # Temporary basic HTML output for testing
-        basic_html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>{api_info['title']}</title>
-            <meta charset="UTF-8">
-        </head>
-        <body>
-            <h1>{api_info['title']}</h1>
-            <p>{api_info['description']}</p>
-            <p>Version: {api_info['version']}</p>
-        </body>
-        </html>
-        """
+        # Generate HTML structure
+        html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{api_info['title']}</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+{self.generate_sidebar_html(tags, api_info)}
+        <main class="main-content">
+            <div class="api-header">
+                <h1 class="api-title">{api_info['title']}</h1>
+                <p class="api-description">{api_info['description']}</p>
+                <div class="api-base-url">{api_info['base_url']}</div>
+            </div>
+            <!-- Endpoint content will be added here in future updates -->
+        </main>
+    </div>
+</body>
+</html>"""
 
         try:
             with open(output_path, 'w', encoding='utf-8') as file:
-                file.write(basic_html)
+                file.write(html_content)
+            print(f"\n✨ Documentation generated successfully!")
+            print(f"📄 Output file: {output_path}")
+            print(f"🎨 Style file: styles.css")
+            print("\nYou can now:")
+            print("1. Open the HTML file in your browser")
+            print("2. Customize the appearance by modifying styles.css")
         except IOError as e:
             print(f"Error writing HTML file: {e}", file=sys.stderr)
             sys.exit(1)
