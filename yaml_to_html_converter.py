@@ -502,7 +502,7 @@ class APISpecConverter:
         """Generate JavaScript for intersection observer and smooth scrolling"""
         return f"""
     <script>
-        {self.read_script_file('intersection_observer')}
+        {self.read_script_file('navigation')}
     </script>"""
 
     def generate_copy_script(self) -> str:
@@ -516,7 +516,7 @@ class APISpecConverter:
         """Generate JavaScript for endpoint expansion/collapse"""
         return f"""
     <script>
-        {self.read_script_file('endpoint')}
+        {self.read_script_file('endpoints')}
     </script>"""
 
     def format_base_url(self) -> str:
