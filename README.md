@@ -25,7 +25,7 @@ You can see my example site at https://charlottetowell.github.io/yaml-to-html-ap
    pip install -r requirements.txt
    ```
 
-3. Replace `swagger.yaml` with your Open API Spec, optionally configure other things as mentioned in [configuration options](#configuration-options)
+3. Replace `swagger.yaml` with your Open API Spec
 
 2. Run the converter with the input & output file names (if renaming, be sure to also update `deploy.yml` workflow accordingly):
    ```bash
