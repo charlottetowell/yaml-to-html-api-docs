@@ -131,22 +131,35 @@ class APISpecConverter:
         """Extract security definitions"""
         return self.spec_data.get('securityDefinitions', {})
 
+    def read_svg_icon(self, icon_name: str) -> str:
+        """Read SVG file content from the icons directory"""
+        try:
+            icon_path = os.path.join('icons', f'{icon_name}.svg')
+            with open(icon_path, 'r', encoding='utf-8') as file:
+                return file.read().strip()
+        except (FileNotFoundError, IOError):
+            print(f"Warning: Icon {icon_name}.svg not found in /icons directory", file=sys.stderr)
+            return ''
+
     def generate_sidebar_html(self, tags: list, api_info: Dict[str, Any], tag_endpoints: Dict[str, list]) -> str:
         """Generate HTML for the sidebar with tags that have endpoints"""
         # Only include tags that have endpoints
         active_tags = [tag for tag in tags if tag['name'] in tag_endpoints]
         
+        # Get tag icon SVG
+        tag_icon = self.read_svg_icon('tag')
+        
         tags_html = '\n'.join([
-            f'            <li class="tag-item" data-tag="{tag["name"]}">{tag["name"]}</li>'
+            f'''            <li class="tag-item" data-tag="{tag["name"]}">
+                <span class="tag-icon">{tag_icon}</span>
+                <span class="tag-name">{tag["name"]}</span>
+            </li>'''
             for tag in active_tags
         ])
         
         return f"""
         <div class="sidebar">
-            <div class="sidebar-header">
-                <h1 class="sidebar-title">API Documentation</h1>
-                <div class="api-version">Version {api_info['version']}</div>
-            </div>
+{self.generate_sidebar_header(api_info)}
             <ul class="tags-list">
 {tags_html}
             </ul>
