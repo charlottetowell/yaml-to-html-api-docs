@@ -1,0 +1,45 @@
+:root {
+    /* Color Variables */
+    --primary-color: #592525;
+    --secondary-color: #fcb9c0;
+    --accent-color: #f25a62;
+    --background-color: #FFFFFF;
+    --sidebar-background: #F8F9FA;
+    --text-primary: #2C3E50;
+    --text-secondary: #7F8C8D;
+    --border-color: #E0E0E0;
+    
+    /* HTTP Method Colors */
+    --method-get: #61AFFE;
+    --method-post: #49CC90;
+    --method-put: #FCA130;
+    --method-delete: #F93E3E;
+    --method-patch: #50E3C2;
+    --method-options: #7D3C98;
+    --method-head: #9B59B6;
+
+    /* Typography */
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    --font-size-base: 16px;
+    --font-size-small: 14px;
+    --font-size-large: 18px;
+    --font-size-xlarge: 24px;
+    --line-height: 1.5;
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Layout */
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --container-max-width: 1200px;
+    --border-radius: 4px;
+
+    /* Transitions */
+    --transition-speed: 0.3s;
+} 

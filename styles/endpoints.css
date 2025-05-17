@@ -1,0 +1,133 @@
+@import 'variables.css';
+
+/* Endpoint Preview Cards */
+.endpoint-preview {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    cursor: pointer;
+}
+
+.endpoint-preview:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+}
+
+.endpoint-preview-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.endpoint-method {
+    min-width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.endpoint-path {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    flex-shrink: 1;
+    min-width: 200px;
+}
+
+.endpoint-description {
+    color: var(--text-secondary);
+    font-size: var(--font-size-small);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 150px;
+}
+
+.endpoint-content-type {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    color: var(--text-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--sidebar-background);
+    border-radius: var(--border-radius);
+    flex-shrink: 0;
+}
+
+.endpoint-security-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-left: var(--spacing-md);
+}
+
+.endpoint-security-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--accent-color);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--transition-speed);
+}
+
+.endpoint-preview:hover .endpoint-security-icon svg {
+    transform: scale(1.1);
+}
+
+/* HTTP Method Badges */
+.method {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.method-get { background-color: var(--method-get); }
+.method-post { background-color: var(--method-post); }
+.method-put { background-color: var(--method-put); }
+.method-delete { background-color: var(--method-delete); }
+.method-patch { background-color: var(--method-patch); }
+.method-options { background-color: var(--method-options); }
+.method-head { background-color: var(--method-head); }
+
+/* Expanded Endpoint Details */
+.endpoint-details {
+    display: none;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.endpoint-preview.expanded .endpoint-details {
+    display: block;
+}
+
+.endpoint-preview.expanded {
+    border-color: var(--accent-color);
+}
+
+.endpoint-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.endpoint-section-title {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.endpoint-full-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+} 

@@ -679,7 +679,8 @@ class APISpecConverter:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{api_info['title']}</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <script type="module" src="scripts/main.js"></script>
 </head>
 <body>
     <div class="container">
@@ -711,10 +712,10 @@ class APISpecConverter:
                 file.write(html_content)
             print(f"\n✨ Documentation generated successfully!")
             print(f"📄 Output file: {output_path}")
-            print(f"🎨 Style file: styles.css")
+            print(f"�� Style file: styles/main.css")
             print("\nYou can now:")
             print("1. Open the HTML file in your browser")
-            print("2. Customize the appearance by modifying styles.css")
+            print("2. Customize the appearance by modifying styles/main.css")
         except IOError as e:
             print(f"Error writing HTML file: {e}", file=sys.stderr)
             sys.exit(1)

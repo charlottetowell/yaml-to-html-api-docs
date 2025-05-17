@@ -1,0 +1,154 @@
+@import 'variables.css';
+
+/* Parameter Table Styles */
+.parameter-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-sm) 0;
+    font-size: var(--font-size-small);
+}
+
+.parameter-table th,
+.parameter-table td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.parameter-table th {
+    font-weight: 600;
+    color: var(--text-primary);
+    background-color: var(--sidebar-background);
+    white-space: nowrap;
+}
+
+.parameter-table td {
+    color: var(--text-secondary);
+}
+
+.parameter-required {
+    color: var(--method-delete);
+    margin-left: var(--spacing-xs);
+    font-weight: 600;
+}
+
+/* Code Blocks */
+.code-block {
+    background-color: var(--sidebar-background);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    overflow-x: auto;
+    margin: var(--spacing-sm) 0;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.code-block comment {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Response Sections */
+.endpoint-section-subtitle {
+    font-size: var(--font-size-small);
+    color: var(--text-primary);
+    margin: var(--spacing-md) 0 var(--spacing-xs);
+    font-weight: 600;
+}
+
+.response-schema,
+.response-example {
+    margin-bottom: var(--spacing-lg);
+}
+
+.response-schema .code-block {
+    color: var(--text-secondary);
+}
+
+.response-schema .code-block span {
+    color: var(--text-primary);
+}
+
+/* Parameter Sections */
+.parameter-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.parameter-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Security Info */
+.security-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background-color: var(--sidebar-background);
+    border-radius: var(--border-radius);
+    margin-top: var(--spacing-sm);
+}
+
+.security-info .endpoint-security-icon {
+    fill: var(--accent-color);
+}
+
+/* Base URL Display */
+.api-base-url {
+    font-family: var(--font-mono);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.api-base-url-label {
+    color: var(--accent-color);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.api-base-url-value {
+    color: var(--text-primary);
+    word-break: break-all;
+    flex: 1;
+}
+
+/* Copy Button */
+.copy-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-xs);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition-speed);
+}
+
+.copy-button:hover {
+    opacity: 0.8;
+}
+
+.copy-button svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--text-secondary);
+}
+
+.copy-button.copied svg {
+    fill: var(--accent-color);
+}
+
+.copy-icon, .tick-icon {
+    transition: display var(--transition-speed);
+    stroke: var(--accent-color);
+} 
