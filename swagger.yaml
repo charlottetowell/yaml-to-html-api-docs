@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Charlotte's Chocolate Factory API
-  description: API for managing chocolate products, orders, and factory operations
+  description: API for managing chocolate products, Orders, and factory operations
   version: '1.0.0'
   contact:
     email: support@charlotteschocolatefactory.com
@@ -16,20 +16,18 @@ produces:
   - application/json
 
 tags:
-  - name: CHOCOLATES
+  - name: Chocolates
     description: Operations about chocolate products
-  - name: ORDERS
+  - name: Orders
     description: Order management operations
-  - name: USERS
+  - name: Users
     description: Customer operations
-  - name: INVENTORY
-    description: Inventory management
 
 paths:
   /chocolates:
     get:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: List all chocolate products
       description: Returns a paginated list of chocolate products
       parameters:
@@ -54,7 +52,7 @@ paths:
           schema:
             type: object
             properties:
-              chocolates:
+              Chocolates:
                 type: array
                 items:
                   type: object
@@ -86,7 +84,7 @@ paths:
     
     options:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: Get chocolate endpoint options
       description: Returns the allowed HTTP methods and other CORS headers
       responses:
@@ -108,7 +106,7 @@ paths:
     
     post:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: Create a new chocolate product
       description: Add a new chocolate product to the catalog
       security:
@@ -153,7 +151,7 @@ paths:
   /chocolates/{chocolateId}:
     get:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: Get chocolate by ID
       description: Returns details of a specific chocolate product
       parameters:
@@ -201,7 +199,7 @@ paths:
 
     put:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: Update chocolate product
       security:
         - Bearer: []
@@ -234,7 +232,7 @@ paths:
 
     patch:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: Partially update chocolate product
       security:
         - Bearer: []
@@ -263,7 +261,7 @@ paths:
 
     delete:
       tags:
-        - CHOCOLATES
+        - Chocolates
       summary: Delete chocolate product
       security:
         - Bearer: []
@@ -283,7 +281,7 @@ paths:
   /orders:
     post:
       tags:
-        - ORDERS
+        - Orders
       summary: Create a new order
       security:
         - Bearer: []
@@ -337,7 +335,7 @@ paths:
   /orders/{orderId}:
     get:
       tags:
-        - ORDERS
+        - Orders
       summary: Get order details
       security:
         - Bearer: []
@@ -391,8 +389,8 @@ paths:
   /users/{userId}/orders:
     get:
       tags:
-        - ORDERS
-        - USERS
+        - Orders
+        - Users
       summary: Get user's order history
       security:
         - Bearer: []
@@ -419,7 +417,7 @@ paths:
           schema:
             type: object
             properties:
-              orders:
+              Orders:
                 type: array
                 items:
                   type: object

@@ -10,32 +10,27 @@
     <div class="container">
 
         <div class="sidebar">
-
             <div class="sidebar-header">
-                
-                <div class="sidebar-logo">
-                    <img src="logo.png" alt="API Documentation Logo">
-                </div>
                 <h1 class="sidebar-title">API Documentation</h1>
                 <div class="api-version">Version 1.0.0</div>
             </div>
             <ul class="tags-list">
-            <li class="tag-item" data-tag="CHOCOLATES">CHOCOLATES</li>
-            <li class="tag-item" data-tag="ORDERS">ORDERS</li>
-            <li class="tag-item" data-tag="USERS">USERS</li>
-            <li class="tag-item" data-tag="INVENTORY">INVENTORY</li>
+            <li class="tag-item" data-tag="Chocolates">Chocolates</li>
+            <li class="tag-item" data-tag="Orders">Orders</li>
+            <li class="tag-item" data-tag="Users">Users</li>
             </ul>
         </div>
         <main class="main-content">
             <div class="api-header">
                 <h1 class="api-title">Charlotte's Chocolate Factory API</h1>
-                <p class="api-description">API for managing chocolate products, orders, and factory operations</p>
+                <p class="api-description">API for managing chocolate products, Orders, and factory operations</p>
                 <div class="api-base-url">api.charlotteschocolatefactory.com/v1</div>
             </div>
 
-        <section id="tag-chocolates" class="tag-section">
-            <div class="tag-section-marker" data-tag="CHOCOLATES"></div>
-            <h2 class="tag-section-title">CHOCOLATES</h2>
+        <section id="tag-section-Chocolates" class="tag-section">
+            <div class="tag-section-marker" data-tag="Chocolates"></div>
+            <h2 class="tag-section-title">Chocolates</h2>
+            <p class="tag-description">Operations about chocolate products</p>
             <div class="endpoint-preview">
                 <span class="endpoint-method method method-get">GET</span>
                 <span class="endpoint-path">/chocolates</span>
@@ -73,9 +68,10 @@
             </div>
         </section>
 
-        <section id="tag-orders" class="tag-section">
-            <div class="tag-section-marker" data-tag="ORDERS"></div>
-            <h2 class="tag-section-title">ORDERS</h2>
+        <section id="tag-section-Orders" class="tag-section">
+            <div class="tag-section-marker" data-tag="Orders"></div>
+            <h2 class="tag-section-title">Orders</h2>
+            <p class="tag-description">Order management operations</p>
             <div class="endpoint-preview">
                 <span class="endpoint-method method method-post">POST</span>
                 <span class="endpoint-path">/orders</span>
@@ -93,20 +89,15 @@
             </div>
         </section>
 
-        <section id="tag-users" class="tag-section">
-            <div class="tag-section-marker" data-tag="USERS"></div>
-            <h2 class="tag-section-title">USERS</h2>
+        <section id="tag-section-Users" class="tag-section">
+            <div class="tag-section-marker" data-tag="Users"></div>
+            <h2 class="tag-section-title">Users</h2>
+            <p class="tag-description">Customer operations</p>
             <div class="endpoint-preview">
                 <span class="endpoint-method method method-get">GET</span>
                 <span class="endpoint-path">/users/{userId}/orders</span>
                 <span class="endpoint-description">Get user's order history</span>
             </div>
-        </section>
-
-        <section id="tag-inventory" class="tag-section">
-            <div class="tag-section-marker" data-tag="INVENTORY"></div>
-            <h2 class="tag-section-title">INVENTORY</h2>
-
         </section>
         </main>
     </div>
@@ -139,7 +130,6 @@
                 }
             });
         }, {
-            // Adjust the rootMargin to trigger slightly before the section comes into view
             rootMargin: '-20% 0px -79% 0px',
             threshold: [0, 0.25, 0.5, 0.75, 1]
         });
@@ -153,7 +143,7 @@
         document.querySelectorAll('.tag-item').forEach(item => {
             item.addEventListener('click', () => {
                 const tag = item.dataset.tag;
-                const section = document.getElementById(`tag-${tag.toLowerCase()}`);
+                const section = document.getElementById(`tag-section-${tag}`);
                 if (section) {
                     // Remove active class from all tags
                     document.querySelectorAll('.tag-item').forEach(tagItem => {

@@ -63,8 +63,50 @@ class APISpecConverter:
         }
 
     def extract_tags(self) -> list:
-        """Extract and organize API tags"""
-        return self.spec_data.get('tags', [])
+        """
+        Extract and organize API tags from both global definitions and endpoints.
+        Also creates an "Uncategorized" tag if there are endpoints without tags.
+        """
+        # Get globally defined tags
+        global_tags = {tag['name']: tag.get('description', '') for tag in self.spec_data.get('tags', [])}
+        
+        # Gather tags from endpoints
+        endpoint_tags = set()
+        has_untagged = False
+        
+        for path, methods in self.spec_data.get('paths', {}).items():
+            for method, details in methods.items():
+                tags = details.get('tags', [])
+                if not tags:
+                    has_untagged = True
+                endpoint_tags.update(tags)
+        
+        # Combine global and endpoint tags
+        all_tags = []
+        
+        # Add tags that are globally defined
+        for tag_name, description in global_tags.items():
+            all_tags.append({
+                'name': tag_name,
+                'description': description
+            })
+        
+        # Add tags that are only defined in endpoints
+        for tag_name in endpoint_tags:
+            if tag_name not in global_tags:
+                all_tags.append({
+                    'name': tag_name,
+                    'description': ''  # No description available for endpoint-only tags
+                })
+        
+        # Add Uncategorized tag if needed
+        if has_untagged:
+            all_tags.append({
+                'name': 'Uncategorized',
+                'description': 'Operations without specific categorization'
+            })
+        
+        return all_tags
 
     def extract_endpoints(self) -> Dict[str, Any]:
         """Extract and organize API endpoints"""
@@ -89,23 +131,29 @@ class APISpecConverter:
         """Extract security definitions"""
         return self.spec_data.get('securityDefinitions', {})
 
-    def generate_sidebar_html(self, tags: list, api_info: Dict[str, Any]) -> str:
-        """Generate HTML for the sidebar with tags"""
+    def generate_sidebar_html(self, tags: list, api_info: Dict[str, Any], tag_endpoints: Dict[str, list]) -> str:
+        """Generate HTML for the sidebar with tags that have endpoints"""
+        # Only include tags that have endpoints
+        active_tags = [tag for tag in tags if tag['name'] in tag_endpoints]
+        
         tags_html = '\n'.join([
             f'            <li class="tag-item" data-tag="{tag["name"]}">{tag["name"]}</li>'
-            for tag in tags
+            for tag in active_tags
         ])
         
         return f"""
         <div class="sidebar">
-{self.generate_sidebar_header(api_info)}
+            <div class="sidebar-header">
+                <h1 class="sidebar-title">API Documentation</h1>
+                <div class="api-version">Version {api_info['version']}</div>
+            </div>
             <ul class="tags-list">
 {tags_html}
             </ul>
         </div>"""
 
     def organize_endpoints_by_tag(self) -> Dict[str, list]:
-        """Organize endpoints by their tags"""
+        """Organize endpoints by their tags, including handling of untagged endpoints"""
         tag_endpoints = {}
         endpoints = self.extract_endpoints()
         
@@ -123,18 +171,31 @@ class APISpecConverter:
                     'description': details['description']
                 }
                 
-                # Add to each tag this endpoint belongs to
-                for tag in details['tags']:
-                    if tag in tag_endpoints:
-                        tag_endpoints[tag].append(endpoint_info)
+                # Get tags for this endpoint
+                endpoint_tags = details['tags']
+                
+                if endpoint_tags:
+                    # Add to each tag this endpoint belongs to
+                    for tag in endpoint_tags:
+                        if tag in tag_endpoints:
+                            tag_endpoints[tag].append(endpoint_info)
+                else:
+                    # Add to Uncategorized if no tags
+                    tag_endpoints['Uncategorized'].append(endpoint_info)
         
-        return tag_endpoints
+        # Remove empty tags
+        return {tag: endpoints for tag, endpoints in tag_endpoints.items() if endpoints}
 
     def generate_endpoint_sections(self, tag_endpoints: Dict[str, list]) -> str:
         """Generate HTML for all endpoint sections"""
         sections = []
+        tags_info = {tag['name']: tag.get('description', '') for tag in self.extract_tags()}
         
         for tag, endpoints in tag_endpoints.items():
+            # Get tag description, if it exists
+            tag_description = tags_info.get(tag, '')
+            description_html = f'\n            <p class="tag-description">{tag_description}</p>' if tag_description else ''
+            
             endpoints_html = '\n'.join([
                 f'''            <div class="endpoint-preview">
                 <span class="endpoint-method method method-{endpoint['method'].lower()}">{endpoint['method']}</span>
@@ -144,9 +205,9 @@ class APISpecConverter:
             ])
             
             sections.append(f'''
-        <section id="tag-{tag.lower()}" class="tag-section">
+        <section id="tag-section-{tag}" class="tag-section">
             <div class="tag-section-marker" data-tag="{tag}"></div>
-            <h2 class="tag-section-title">{tag}</h2>
+            <h2 class="tag-section-title">{tag}</h2>{description_html}
 {endpoints_html}
         </section>''')
         
@@ -183,7 +244,6 @@ class APISpecConverter:
                 }
             });
         }, {
-            // Adjust the rootMargin to trigger slightly before the section comes into view
             rootMargin: '-20% 0px -79% 0px',
             threshold: [0, 0.25, 0.5, 0.75, 1]
         });
@@ -197,7 +257,7 @@ class APISpecConverter:
         document.querySelectorAll('.tag-item').forEach(item => {
             item.addEventListener('click', () => {
                 const tag = item.dataset.tag;
-                const section = document.getElementById(`tag-${tag.toLowerCase()}`);
+                const section = document.getElementById(`tag-section-${tag}`);
                 if (section) {
                     // Remove active class from all tags
                     document.querySelectorAll('.tag-item').forEach(tagItem => {
@@ -263,7 +323,7 @@ class APISpecConverter:
 </head>
 <body>
     <div class="container">
-{self.generate_sidebar_html(tags, api_info)}
+{self.generate_sidebar_html(tags, api_info, tag_endpoints)}
         <main class="main-content">
             <div class="api-header">
                 <h1 class="api-title">{api_info['title']}</h1>
