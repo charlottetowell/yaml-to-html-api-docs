@@ -149,6 +149,22 @@
                                     <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 200</h4>
                 <p>Successful operation</p>
+                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{
+  "Chocolates": [
+    {
+      "id": (integer),
+      "name": (string),
+      "category": (string),
+      "price": (number),
+      "description": (string),
+      "inStock": (boolean)
+    }
+  ],
+  "total": (integer)
+}</pre>
+                </div>
             </div>
             <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 400</h4>
@@ -273,6 +289,22 @@
                                     <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 200</h4>
                 <p>Successful operation</p>
+                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{
+  "id": (integer),
+  "name": (string),
+  "category": (string),
+  "price": (number),
+  "description": (string),
+  "ingredients": [ (string) ],
+  "nutritionInfo": {
+    "calories": (integer),
+    "sugar": (integer),
+    "cocoa": (integer)
+  }
+}</pre>
+                </div>
             </div>
             <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 404</h4>
@@ -513,6 +545,14 @@
                                     <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 201</h4>
                 <p>Order created successfully</p>
+                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{
+  "orderId": (string),
+  "status": (string),
+  "total": (number)
+}</pre>
+                </div>
             </div>
             <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 400</h4>
@@ -572,6 +612,28 @@
                                     <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 200</h4>
                 <p>Successful operation</p>
+                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{
+  "orderId": (string),
+  "status": (string),
+  "items": [
+    {
+      "chocolateId": (integer),
+      "name": (string),
+      "quantity": (integer),
+      "price": (number)
+    }
+  ],
+  "total": (number),
+  "shippingAddress": {
+    "street": (string),
+    "city": (string),
+    "country": (string),
+    "postalCode": (string)
+  }
+}</pre>
+                </div>
             </div>
             <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 404</h4>
@@ -646,6 +708,20 @@
                                     <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 200</h4>
                 <p>Successful operation</p>
+                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{
+  "Orders": [
+    {
+      "orderId": (string),
+      "date": (string),
+      "status": (string),
+      "total": (number)
+    }
+  ],
+  "total": (integer)
+}</pre>
+                </div>
             </div>
             <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 401</h4>
@@ -727,6 +803,20 @@
                                     <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 200</h4>
                 <p>Successful operation</p>
+                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{
+  "Orders": [
+    {
+      "orderId": (string),
+      "date": (string),
+      "status": (string),
+      "total": (number)
+    }
+  ],
+  "total": (integer)
+}</pre>
+                </div>
             </div>
             <div class="endpoint-section">
                 <h4 class="endpoint-section-title">Response 401</h4>

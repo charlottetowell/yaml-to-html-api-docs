@@ -380,6 +380,8 @@ body {
     font-size: var(--font-size-small);
     overflow-x: auto;
     margin: var(--spacing-sm) 0;
+    position: relative;
+    line-height: 1.5;
 }
 
 .parameter-table {
@@ -427,4 +429,36 @@ body {
     height: 1px;
     width: 1px;
     opacity: 0;
+}
+
+/* Response Sections */
+.endpoint-section-subtitle {
+    font-size: var(--font-size-small);
+    color: var(--text-primary);
+    margin: var(--spacing-md) 0 var(--spacing-xs);
+    font-weight: 600;
+}
+
+.response-schema,
+.response-example {
+    margin-bottom: var(--spacing-lg);
+}
+
+.response-schema .code-block {
+    color: var(--text-secondary);
+}
+
+.response-schema .code-block span {
+    color: var(--text-primary);
+}
+
+/* Style for required field indicators */
+.code-block *::after {
+    color: var(--method-delete);
+}
+
+/* Style for comments in schema */
+.code-block comment {
+    color: var(--text-secondary);
+    font-style: italic;
 } 

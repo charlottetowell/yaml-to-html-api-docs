@@ -231,30 +231,108 @@ class APISpecConverter:
                 </tbody>
             </table>'''
 
+    def format_schema_as_json(self, schema: Dict[str, Any], indent_level: int = 0) -> str:
+        """Convert OpenAPI/Swagger schema to JSON-like structure with types"""
+        if not schema:
+            return "{}"
+            
+        def _indent(level: int) -> str:
+            return "  " * level
+
+        result = []
+        
+        if 'type' in schema:
+            if schema['type'] == 'object' and 'properties' in schema:
+                result.append("{")
+                properties = schema['properties']
+                required = schema.get('required', [])
+                
+                for i, (prop_name, prop_schema) in enumerate(properties.items()):
+                    is_required = prop_name in required
+                    prop_type = prop_schema.get('type', 'any')
+                    description = prop_schema.get('description', '')
+                    
+                    # Handle nested objects
+                    if prop_type == 'object' and 'properties' in prop_schema:
+                        nested_value = self.format_schema_as_json(prop_schema, indent_level + 1)
+                        line = f'{_indent(indent_level + 1)}"{prop_name}": {nested_value}'
+                    # Handle arrays
+                    elif prop_type == 'array' and 'items' in prop_schema:
+                        items_schema = prop_schema['items']
+                        if 'type' in items_schema:
+                            if items_schema['type'] == 'object':
+                                nested_value = self.format_schema_as_json(items_schema, indent_level + 2)
+                                line = f'{_indent(indent_level + 1)}"{prop_name}": [\n{_indent(indent_level + 2)}{nested_value}\n{_indent(indent_level + 1)}]'
+                            else:
+                                line = f'{_indent(indent_level + 1)}"{prop_name}": [ ({items_schema["type"]}) ]'
+                        else:
+                            line = f'{_indent(indent_level + 1)}"{prop_name}": [ (any) ]'
+                    # Handle primitive types
+                    else:
+                        type_info = f"({prop_type})"
+                        if description:
+                            type_info += f" // {description}"
+                        if is_required:
+                            type_info += " *"
+                        line = f'{_indent(indent_level + 1)}"{prop_name}": {type_info}'
+                    
+                    if i < len(properties) - 1:
+                        line += ","
+                    result.append(line)
+                
+                result.append(f"{_indent(indent_level)}}}")
+            elif schema['type'] == 'array' and 'items' in schema:
+                items_schema = schema['items']
+                if 'type' in items_schema:
+                    if items_schema['type'] == 'object':
+                        nested_value = self.format_schema_as_json(items_schema, indent_level)
+                        result.append(f"[\n{_indent(indent_level + 1)}{nested_value}\n{_indent(indent_level)}]")
+                    else:
+                        result.append(f"[ ({items_schema['type']}) ]")
+                else:
+                    result.append("[ (any) ]")
+            else:
+                result.append(f"({schema['type']})")
+        else:
+            result.append("(any)")
+            
+        return '\n'.join(result)
+
     def format_response_example(self, responses: Dict[str, Any]) -> str:
-        """Format response examples into HTML"""
+        """Format response examples and schemas into HTML"""
         examples = []
         for status_code, response in responses.items():
             schema = response.get('schema', {})
             example = response.get('example') or schema.get('example')
+            description = response.get('description', '')
             
+            # Start the response section
+            examples.append(f'''            <div class="endpoint-section">
+                <h4 class="endpoint-section-title">Response {status_code}</h4>
+                <p>{description}</p>''')
+            
+            # If there's a schema, show it first
+            if schema:
+                schema_json = self.format_schema_as_json(schema)
+                examples.append(f'''                <div class="response-schema">
+                    <h5 class="endpoint-section-subtitle">Schema</h5>
+                    <pre class="code-block">{schema_json}</pre>
+                </div>''')
+            
+            # If there's an example, show it after the schema
             if example:
                 import json
                 try:
                     formatted_example = json.dumps(example, indent=2)
                 except (TypeError, ValueError):
                     formatted_example = str(example)
-                    
-                examples.append(f'''            <div class="endpoint-section">
-                <h4 class="endpoint-section-title">Response {status_code}</h4>
-                <p>{response.get('description', '')}</p>
-                <pre class="code-block">{formatted_example}</pre>
-            </div>''')
-            else:
-                examples.append(f'''            <div class="endpoint-section">
-                <h4 class="endpoint-section-title">Response {status_code}</h4>
-                <p>{response.get('description', '')}</p>
-            </div>''')
+                
+                examples.append(f'''                <div class="response-example">
+                    <h5 class="endpoint-section-subtitle">Example</h5>
+                    <pre class="code-block">{formatted_example}</pre>
+                </div>''')
+            
+            examples.append('            </div>')
                 
         return '\n'.join(examples)
 
