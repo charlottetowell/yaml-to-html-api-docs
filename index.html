@@ -110,21 +110,24 @@
                     <span class="endpoint-path">/chocolates</span>
                     <span class="endpoint-description">List all chocolate products</span>
                     
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description">Returns a paginated list of chocolate products</div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>page</td>
                     <td>query</td>
@@ -141,8 +144,9 @@
                     <td>string</td>
                     <td>Filter by chocolate category</td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -179,6 +183,7 @@
                     <span class="endpoint-path">/chocolates</span>
                     <span class="endpoint-description">Get chocolate endpoint options</span>
                     
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description">Returns the allowed HTTP methods and other CORS headers</div>
@@ -204,29 +209,22 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description">Add a new chocolate product to the catalog</div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>product<span class="parameter-required">*</span></td>
-                    <td>body</td>
-                    <td>object</td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">Request Body Schema</h5>
+                <pre class="code-block">{
+  "name": (string) *,
+  "category": (string) *,
+  "price": (number) *,
+  "description": (string),
+  "ingredients": [ (string) ]
+}</pre>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -260,29 +258,33 @@
                     <span class="endpoint-path">/chocolates/{chocolateId}</span>
                     <span class="endpoint-description">Get chocolate by ID</span>
                     
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description">Returns details of a specific chocolate product</div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>chocolateId<span class="parameter-required">*</span></td>
                     <td>path</td>
                     <td>integer</td>
                     <td>ID of the chocolate product</td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -322,34 +324,42 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>chocolateId<span class="parameter-required">*</span></td>
                     <td>path</td>
                     <td>integer</td>
                     <td></td>
-                </tr>                <tr>
-                    <td>product<span class="parameter-required">*</span></td>
-                    <td>body</td>
-                    <td>object</td>
-                    <td></td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">Request Body Schema</h5>
+                <pre class="code-block">{
+  "name": (string),
+  "price": (number),
+  "description": (string),
+  "inStock": (boolean)
+}</pre>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -386,34 +396,40 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>chocolateId<span class="parameter-required">*</span></td>
                     <td>path</td>
                     <td>integer</td>
                     <td></td>
-                </tr>                <tr>
-                    <td>updates<span class="parameter-required">*</span></td>
-                    <td>body</td>
-                    <td>object</td>
-                    <td></td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">Request Body Schema</h5>
+                <pre class="code-block">{
+  "price": (number),
+  "inStock": (boolean)
+}</pre>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -450,29 +466,33 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>chocolateId<span class="parameter-required">*</span></td>
                     <td>path</td>
                     <td>integer</td>
                     <td></td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -516,29 +536,29 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>order<span class="parameter-required">*</span></td>
-                    <td>body</td>
-                    <td>object</td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">Request Body Schema</h5>
+                <pre class="code-block">{
+  "items": [
+    {
+      "chocolateId": (integer),
+      "quantity": (integer)
+    }
+  ],
+  "shippingAddress": {
+    "street": (string),
+    "city": (string),
+    "country": (string),
+    "postalCode": (string)
+  }
+}</pre>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -583,29 +603,33 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>orderId<span class="parameter-required">*</span></td>
                     <td>path</td>
                     <td>string</td>
                     <td></td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -664,21 +688,24 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>userId<span class="parameter-required">*</span></td>
                     <td>path</td>
@@ -700,8 +727,9 @@
                     <td>integer</td>
                     <td></td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>
@@ -759,21 +787,24 @@
 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg></span>
+                    
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description"></div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Parameters</h3>
-                                    <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+                                    <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <tr>
                     <td>userId<span class="parameter-required">*</span></td>
                     <td>path</td>
@@ -795,8 +826,9 @@
                     <td>integer</td>
                     <td></td>
                 </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
                     </div>
                     <div class="endpoint-section">
                         <h3 class="endpoint-section-title">Responses</h3>

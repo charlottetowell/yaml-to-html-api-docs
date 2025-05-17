@@ -204,32 +204,104 @@ class APISpecConverter:
         if not parameters:
             return '<p>No parameters required.</p>'
             
-        rows = []
+        # Separate parameters by location
+        params_by_location = {
+            'path': [],
+            'query': [],
+            'header': [],
+            'body': []
+        }
+        
         for param in parameters:
-            required = '<span class="parameter-required">*</span>' if param.get('required', False) else ''
-            description = param.get('description', '')
-            param_type = param.get('type', param.get('schema', {}).get('type', 'string'))
+            location = param.get('in', 'body')
+            params_by_location[location].append(param)
             
-            rows.append(f'''                <tr>
+        sections = []
+        
+        # Handle path, query, and header parameters
+        simple_params = []
+        for location in ['path', 'query', 'header']:
+            simple_params.extend(params_by_location[location])
+            
+        if simple_params:
+            rows = []
+            for param in simple_params:
+                required = '<span class="parameter-required">*</span>' if param.get('required', False) else ''
+                description = param.get('description', '')
+                param_type = param.get('type', 'string')
+                
+                rows.append(f'''                <tr>
                     <td>{param['name']}{required}</td>
                     <td>{param.get('in', 'body')}</td>
                     <td>{param_type}</td>
                     <td>{description}</td>
                 </tr>''')
                 
-        return f'''            <table class="parameter-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
+            sections.append(f'''            <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">URL Parameters</h5>
+                <table class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 {''.join(rows)}
-                </tbody>
-            </table>'''
+                    </tbody>
+                </table>
+            </div>''')
+            
+        # Handle body parameters
+        body_params = params_by_location['body']
+        if body_params:
+            for param in body_params:
+                if 'schema' in param:
+                    schema_json = self.format_schema_as_json(param['schema'])
+                    example = param.get('example') or param.get('schema', {}).get('example')
+                    
+                    sections.append(f'''            <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">Request Body Schema</h5>
+                <pre class="code-block">{schema_json}</pre>''')
+                    
+                    if example:
+                        import json
+                        try:
+                            formatted_example = json.dumps(example, indent=2)
+                        except (TypeError, ValueError):
+                            formatted_example = str(example)
+                            
+                        sections.append(f'''                <h5 class="endpoint-section-subtitle">Request Body Example</h5>
+                <pre class="code-block">{formatted_example}</pre>''')
+                        
+                    sections.append('            </div>')
+                else:
+                    # Handle non-schema body parameters
+                    sections.append(f'''            <div class="parameter-section">
+                <h5 class="endpoint-section-subtitle">Request Body</h5>
+                <p>{param.get('description', 'No description available.')}</p>
+                <table class="parameter-table">
+                    <tr>
+                        <th>Content Type</th>
+                        <td>{param.get('consumes', ['application/json'])[0]}</td>
+                    </tr>
+                    <tr>
+                        <th>Required</th>
+                        <td>{"Yes" if param.get('required', False) else "No"}</td>
+                    </tr>
+                </table>
+            </div>''')
+                    
+        return '\n'.join(sections) if sections else '<p>No parameters required.</p>'
+
+    def format_request_content_type(self, operation: Dict[str, Any]) -> str:
+        """Format request content type information"""
+        consumes = operation.get('consumes', ['application/json'])
+        if len(consumes) == 1:
+            return consumes[0]
+        return ', '.join(consumes)
 
     def format_schema_as_json(self, schema: Dict[str, Any], indent_level: int = 0) -> str:
         """Convert OpenAPI/Swagger schema to JSON-like structure with types"""
@@ -376,6 +448,10 @@ class APISpecConverter:
                 has_security = bool(details.get('security', []))
                 security_icon = f'<span class="endpoint-security-icon">{self.read_svg_icon("lock")}</span>' if has_security else ''
                 
+                # Get content type
+                content_type = self.format_request_content_type(details)
+                content_type_html = f'<span class="endpoint-content-type">{content_type}</span>' if content_type != 'application/json' else ''
+                
                 # Generate detailed view
                 parameters_html = self.format_parameter_table(details.get('parameters', []))
                 responses_html = self.format_response_example(details.get('responses', {}))
@@ -387,6 +463,7 @@ class APISpecConverter:
                     <span class="endpoint-path">{path}</span>
                     <span class="endpoint-description">{details.get('summary', '')}</span>
                     {security_icon}
+                    {content_type_html}
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description">{details.get('description', '')}</div>
