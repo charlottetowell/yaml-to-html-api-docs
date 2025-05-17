@@ -199,29 +199,136 @@ class APISpecConverter:
         # Remove empty tags
         return {tag: endpoints for tag, endpoints in tag_endpoints.items() if endpoints}
 
+    def format_parameter_table(self, parameters: list) -> str:
+        """Format parameters into an HTML table"""
+        if not parameters:
+            return '<p>No parameters required.</p>'
+            
+        rows = []
+        for param in parameters:
+            required = '<span class="parameter-required">*</span>' if param.get('required', False) else ''
+            description = param.get('description', '')
+            param_type = param.get('type', param.get('schema', {}).get('type', 'string'))
+            
+            rows.append(f'''                <tr>
+                    <td>{param['name']}{required}</td>
+                    <td>{param.get('in', 'body')}</td>
+                    <td>{param_type}</td>
+                    <td>{description}</td>
+                </tr>''')
+                
+        return f'''            <table class="parameter-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+{''.join(rows)}
+                </tbody>
+            </table>'''
+
+    def format_response_example(self, responses: Dict[str, Any]) -> str:
+        """Format response examples into HTML"""
+        examples = []
+        for status_code, response in responses.items():
+            schema = response.get('schema', {})
+            example = response.get('example') or schema.get('example')
+            
+            if example:
+                import json
+                try:
+                    formatted_example = json.dumps(example, indent=2)
+                except (TypeError, ValueError):
+                    formatted_example = str(example)
+                    
+                examples.append(f'''            <div class="endpoint-section">
+                <h4 class="endpoint-section-title">Response {status_code}</h4>
+                <p>{response.get('description', '')}</p>
+                <pre class="code-block">{formatted_example}</pre>
+            </div>''')
+            else:
+                examples.append(f'''            <div class="endpoint-section">
+                <h4 class="endpoint-section-title">Response {status_code}</h4>
+                <p>{response.get('description', '')}</p>
+            </div>''')
+                
+        return '\n'.join(examples)
+
+    def format_security_info(self, security: list, definitions: Dict[str, Any]) -> str:
+        """Format security information into HTML"""
+        if not security:
+            return ''
+            
+        security_html = []
+        for sec_req in security:
+            for sec_name, scopes in sec_req.items():
+                if sec_name in definitions:
+                    sec_def = definitions[sec_name]
+                    security_html.append(f'''            <div class="security-info">
+                <span class="endpoint-security-icon">{self.read_svg_icon('lock')}</span>
+                <div>
+                    <strong>{sec_def.get('type', '').title()} Authentication</strong>
+                    <p>{sec_def.get('description', '')}</p>
+                </div>
+            </div>''')
+                    
+        return '\n'.join(security_html)
+
     def generate_endpoint_sections(self, tag_endpoints: Dict[str, list]) -> str:
         """Generate HTML for all endpoint sections"""
         sections = []
         tags_info = {tag['name']: tag.get('description', '') for tag in self.extract_tags()}
+        security_definitions = self.extract_security_definitions()
         
         for tag, endpoints in tag_endpoints.items():
-            # Get tag description, if it exists
             tag_description = tags_info.get(tag, '')
             description_html = f'\n            <p class="tag-description">{tag_description}</p>' if tag_description else ''
             
-            endpoints_html = '\n'.join([
-                f'''            <div class="endpoint-preview">
-                <span class="endpoint-method method method-{endpoint['method'].lower()}">{endpoint['method']}</span>
-                <span class="endpoint-path">{endpoint['path']}</span>
-                <span class="endpoint-description">{endpoint['description'] or endpoint['summary']}</span>
-            </div>''' for endpoint in endpoints
-            ])
+            endpoints_html = []
+            for endpoint in endpoints:
+                path = endpoint['path']
+                method = endpoint['method']
+                details = self.spec_data['paths'][path][method.lower()]
+                
+                # Check if endpoint has security
+                has_security = bool(details.get('security', []))
+                security_icon = f'<span class="endpoint-security-icon">{self.read_svg_icon("lock")}</span>' if has_security else ''
+                
+                # Generate detailed view
+                parameters_html = self.format_parameter_table(details.get('parameters', []))
+                responses_html = self.format_response_example(details.get('responses', {}))
+                security_html = self.format_security_info(details.get('security', []), security_definitions)
+                
+                endpoints_html.append(f'''            <div class="endpoint-preview" data-path="{path}" data-method="{method}">
+                <div class="endpoint-preview-header">
+                    <span class="endpoint-method method method-{method.lower()}">{method}</span>
+                    <span class="endpoint-path">{path}</span>
+                    <span class="endpoint-description">{details.get('summary', '')}</span>
+                    {security_icon}
+                </div>
+                <div class="endpoint-details">
+                    <div class="endpoint-full-description">{details.get('description', '')}</div>
+                    <div class="endpoint-section">
+                        <h3 class="endpoint-section-title">Parameters</h3>
+                        {parameters_html}
+                    </div>
+                    <div class="endpoint-section">
+                        <h3 class="endpoint-section-title">Responses</h3>
+                        {responses_html}
+                    </div>
+                    {security_html}
+                </div>
+            </div>''')
             
             sections.append(f'''
         <section id="tag-section-{tag}" class="tag-section">
             <div class="tag-section-marker" data-tag="{tag}"></div>
             <h2 class="tag-section-title">{tag}</h2>{description_html}
-{endpoints_html}
+{''.join(endpoints_html)}
         </section>''')
         
         return '\n'.join(sections)
@@ -374,6 +481,31 @@ class APISpecConverter:
     </script>
     """
 
+    def generate_endpoint_script(self) -> str:
+        """Generate JavaScript for endpoint expansion/collapse"""
+        return """
+    <script>
+        // Handle endpoint expansion/collapse
+        document.querySelectorAll('.endpoint-preview').forEach(endpoint => {
+            endpoint.addEventListener('click', (e) => {
+                // Don't toggle if clicking inside a code block or table
+                if (e.target.closest('.code-block') || e.target.closest('.parameter-table')) {
+                    return;
+                }
+                
+                // Close any other open endpoints
+                document.querySelectorAll('.endpoint-preview.expanded').forEach(openEndpoint => {
+                    if (openEndpoint !== endpoint) {
+                        openEndpoint.classList.remove('expanded');
+                    }
+                });
+                
+                // Toggle current endpoint
+                endpoint.classList.toggle('expanded');
+            });
+        });
+    </script>"""
+
     def generate_html(self, output_path: str) -> None:
         """Generate HTML documentation from the parsed API spec"""
         api_info = self.extract_api_info()
@@ -415,6 +547,7 @@ class APISpecConverter:
     </div>
 {self.generate_intersection_observer_js()}
 {self.generate_copy_script()}
+{self.generate_endpoint_script()}
 </body>
 </html>"""
 

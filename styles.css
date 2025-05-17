@@ -297,14 +297,19 @@ body {
     border-radius: var(--border-radius);
     padding: var(--spacing-md);
     margin-bottom: var(--spacing-md);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    transition: box-shadow var(--transition-speed);
+    cursor: pointer;
+    transition: box-shadow var(--transition-speed), border-color var(--transition-speed);
 }
 
 .endpoint-preview:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+}
+
+.endpoint-preview-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
 }
 
 .endpoint-method {
@@ -326,6 +331,93 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.endpoint-security-icon {
+    width: 16px;
+    height: 16px;
+    fill: var(--text-secondary);
+}
+
+/* Expanded Endpoint Details */
+.endpoint-details {
+    display: none;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.endpoint-preview.expanded .endpoint-details {
+    display: block;
+}
+
+.endpoint-preview.expanded {
+    border-color: var(--accent-color);
+}
+
+.endpoint-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.endpoint-section-title {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.endpoint-full-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+}
+
+.code-block {
+    background-color: var(--sidebar-background);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    overflow-x: auto;
+    margin: var(--spacing-sm) 0;
+}
+
+.parameter-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-sm) 0;
+}
+
+.parameter-table th,
+.parameter-table td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.parameter-table th {
+    font-weight: 600;
+    color: var(--text-primary);
+    background-color: var(--sidebar-background);
+}
+
+.parameter-required {
+    color: var(--method-delete);
+    margin-left: var(--spacing-xs);
+}
+
+.security-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background-color: var(--sidebar-background);
+    border-radius: var(--border-radius);
+    margin-top: var(--spacing-sm);
+}
+
+.security-info .endpoint-security-icon {
+    fill: var(--accent-color);
 }
 
 /* Intersection Observer Threshold Marker */
