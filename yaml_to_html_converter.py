@@ -319,11 +319,71 @@ class APISpecConverter:
         });
     </script>"""
 
+    def format_base_url(self) -> str:
+        """Format the complete base URL with scheme"""
+        host = self.spec_data.get('host', '')
+        base_path = self.spec_data.get('basePath', '')
+        schemes = self.spec_data.get('schemes', ['https'])
+        
+        # Use the first scheme (usually https or http)
+        scheme = schemes[0] if schemes else 'https'
+        
+        # Combine all parts, ensuring no double slashes
+        base_url = f"{scheme}://{host}"
+        if base_path:
+            # Ensure base_path starts with / and doesn't end with /
+            base_path = f"/{base_path.strip('/')}"
+            base_url = f"{base_url}{base_path}"
+            
+        return base_url
+
+    def generate_copy_script(self) -> str:
+        """Generate JavaScript for copy functionality"""
+        return """
+    <script>
+        function setupCopyButtons() {
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const textToCopy = button.getAttribute('data-copy');
+                    const copyIcon = button.querySelector('.copy-icon');
+                    const tickIcon = button.querySelector('.tick-icon');
+                    
+                    try {
+                        await navigator.clipboard.writeText(textToCopy);
+                        
+                        // Show tick icon
+                        copyIcon.style.display = 'none';
+                        tickIcon.style.display = 'block';
+                        button.classList.add('copied');
+                        
+                        // Reset after 2 seconds
+                        setTimeout(() => {
+                            copyIcon.style.display = 'block';
+                            tickIcon.style.display = 'none';
+                            button.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy text:', err);
+                    }
+                });
+            });
+        }
+        
+        // Initialize copy buttons when the page loads
+        document.addEventListener('DOMContentLoaded', setupCopyButtons);
+    </script>
+    """
+
     def generate_html(self, output_path: str) -> None:
         """Generate HTML documentation from the parsed API spec"""
         api_info = self.extract_api_info()
         tags = self.extract_tags()
         tag_endpoints = self.organize_endpoints_by_tag()
+        base_url = self.format_base_url()
+
+        # Get icons
+        copy_icon = self.read_svg_icon('copy')
+        tick_icon = self.read_svg_icon('tick')
 
         # Generate HTML structure
         html_content = f"""<!DOCTYPE html>
@@ -341,12 +401,20 @@ class APISpecConverter:
             <div class="api-header">
                 <h1 class="api-title">{api_info['title']}</h1>
                 <p class="api-description">{api_info['description']}</p>
-                <div class="api-base-url">{api_info['base_url']}</div>
+                <div class="api-base-url">
+                    <span class="api-base-url-label">Base URL</span>
+                    <code class="api-base-url-value">{base_url}</code>
+                    <button class="copy-button" data-copy="{base_url}" title="Copy base URL">
+                        <span class="copy-icon" style="display: block">{copy_icon}</span>
+                        <span class="tick-icon" style="display: none">{tick_icon}</span>
+                    </button>
+                </div>
             </div>
 {self.generate_endpoint_sections(tag_endpoints)}
         </main>
     </div>
 {self.generate_intersection_observer_js()}
+{self.generate_copy_script()}
 </body>
 </html>"""
 

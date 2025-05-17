@@ -151,17 +151,73 @@ body {
 /* API Title and Description */
 .api-header {
     margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .api-title {
     font-size: var(--font-size-xlarge);
     color: var(--primary-color);
     margin-bottom: var(--spacing-md);
+    font-weight: 600;
 }
 
 .api-description {
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+.api-base-url {
+    font-family: var(--font-mono);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.api-base-url-label {
+    color: var(--accent-color);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.api-base-url-value {
+    color: var(--text-primary);
+    word-break: break-all;
+    flex: 1;
+}
+
+.copy-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-xs);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition-speed);
+}
+
+.copy-button:hover {
+    opacity: 0.8;
+}
+
+.copy-button svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--text-secondary);
+}
+
+.copy-button.copied svg {
+    fill: var(--accent-color);
 }
 
 .api-version {
@@ -223,7 +279,7 @@ body {
     color: var(--primary-color);
     margin-bottom: var(--spacing-sm);
     padding-bottom: var(--spacing-sm);
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--secondary-color);
 }
 
 .tag-description {
