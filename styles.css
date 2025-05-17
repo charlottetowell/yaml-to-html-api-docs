@@ -1,8 +1,8 @@
 :root {
     /* Color Variables */
-    --primary-color: #2C3E50;
-    --secondary-color: #3498DB;
-    --accent-color: #E74C3C;
+    --primary-color: #592525;
+    --secondary-color: #fcb9c0;
+    --accent-color: #f25a62;
     --background-color: #FFFFFF;
     --sidebar-background: #F8F9FA;
     --text-primary: #2C3E50;
@@ -107,7 +107,9 @@ body {
     margin-bottom: var(--spacing-xs);
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: background-color var(--transition-speed);
+    transition: all var(--transition-speed) ease-in-out;
+    border-left: 3px solid transparent;
+    position: relative;
 }
 
 .tag-item:hover {
@@ -115,8 +117,11 @@ body {
 }
 
 .tag-item.active {
-    background-color: var(--primary-color);
-    color: var(--background-color);
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--accent-color);
+    font-weight: 600;
+    border-left: 3px solid var(--accent-color);
+    padding-left: calc(var(--spacing-md) - 3px);
 }
 
 /* Main Content Area */
