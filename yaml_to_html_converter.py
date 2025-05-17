@@ -488,97 +488,35 @@ class APISpecConverter:
         
         return '\n'.join(sections)
 
+    def read_script_file(self, script_name: str) -> str:
+        """Read a JavaScript file from the scripts directory"""
+        try:
+            script_path = os.path.join('scripts', f'{script_name}.js')
+            with open(script_path, 'r', encoding='utf-8') as file:
+                return file.read().strip()
+        except (FileNotFoundError, IOError):
+            print(f"Warning: Script {script_name}.js not found in /scripts directory", file=sys.stderr)
+            return ''
+
     def generate_intersection_observer_js(self) -> str:
         """Generate JavaScript for intersection observer and smooth scrolling"""
-        return """
+        return f"""
     <script>
-        // Track current active section
-        let currentActiveTag = null;
+        {self.read_script_file('intersection_observer')}
+    </script>"""
 
-        // Intersection Observer for tag highlighting
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const tag = entry.target.dataset.tag;
-                const tagItem = document.querySelector(`.tag-item[data-tag="${tag}"]`);
-                
-                if (entry.isIntersecting) {
-                    // Update current active tag
-                    currentActiveTag = tag;
-                    
-                    // Remove active class from all tags
-                    document.querySelectorAll('.tag-item').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                    
-                    // Add active class to current tag
-                    if (tagItem) {
-                        tagItem.classList.add('active');
-                        // Ensure the active tag is visible in the sidebar
-                        tagItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }
-                }
-            });
-        }, {
-            rootMargin: '-20% 0px -79% 0px',
-            threshold: [0, 0.25, 0.5, 0.75, 1]
-        });
+    def generate_copy_script(self) -> str:
+        """Generate JavaScript for copy functionality"""
+        return f"""
+    <script>
+        {self.read_script_file('copy')}
+    </script>"""
 
-        // Observe all section markers
-        document.querySelectorAll('.tag-section-marker').forEach(marker => {
-            observer.observe(marker);
-        });
-
-        // Click handlers for tag items
-        document.querySelectorAll('.tag-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const tag = item.dataset.tag;
-                const section = document.getElementById(`tag-section-${tag}`);
-                if (section) {
-                    // Remove active class from all tags
-                    document.querySelectorAll('.tag-item').forEach(tagItem => {
-                        tagItem.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked tag
-                    item.classList.add('active');
-                    
-                    // Scroll to section
-                    section.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Add scroll event listener for more precise tracking
-        document.querySelector('.main-content').addEventListener('scroll', () => {
-            // Find all tag sections
-            const sections = document.querySelectorAll('.tag-section');
-            const mainContent = document.querySelector('.main-content');
-            
-            // Get the current scroll position
-            const scrollPosition = mainContent.scrollTop + mainContent.offsetHeight * 0.2;
-            
-            // Find the current section
-            let currentSection = null;
-            sections.forEach(section => {
-                if (section.offsetTop <= scrollPosition) {
-                    currentSection = section;
-                }
-            });
-            
-            if (currentSection) {
-                const tag = currentSection.querySelector('.tag-section-marker').dataset.tag;
-                if (tag !== currentActiveTag) {
-                    // Update active tag
-                    document.querySelectorAll('.tag-item').forEach(item => {
-                        item.classList.remove('active');
-                        if (item.dataset.tag === tag) {
-                            item.classList.add('active');
-                            currentActiveTag = tag;
-                        }
-                    });
-                }
-            }
-        });
+    def generate_endpoint_script(self) -> str:
+        """Generate JavaScript for endpoint expansion/collapse"""
+        return f"""
+    <script>
+        {self.read_script_file('endpoint')}
     </script>"""
 
     def format_base_url(self) -> str:
@@ -599,68 +537,6 @@ class APISpecConverter:
             
         return base_url
 
-    def generate_copy_script(self) -> str:
-        """Generate JavaScript for copy functionality"""
-        return """
-    <script>
-        function setupCopyButtons() {
-            document.querySelectorAll('.copy-button').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const textToCopy = button.getAttribute('data-copy');
-                    const copyIcon = button.querySelector('.copy-icon');
-                    const tickIcon = button.querySelector('.tick-icon');
-                    
-                    try {
-                        await navigator.clipboard.writeText(textToCopy);
-                        
-                        // Show tick icon
-                        copyIcon.style.display = 'none';
-                        tickIcon.style.display = 'block';
-                        button.classList.add('copied');
-                        
-                        // Reset after 2 seconds
-                        setTimeout(() => {
-                            copyIcon.style.display = 'block';
-                            tickIcon.style.display = 'none';
-                            button.classList.remove('copied');
-                        }, 2000);
-                    } catch (err) {
-                        console.error('Failed to copy text:', err);
-                    }
-                });
-            });
-        }
-        
-        // Initialize copy buttons when the page loads
-        document.addEventListener('DOMContentLoaded', setupCopyButtons);
-    </script>
-    """
-
-    def generate_endpoint_script(self) -> str:
-        """Generate JavaScript for endpoint expansion/collapse"""
-        return """
-    <script>
-        // Handle endpoint expansion/collapse
-        document.querySelectorAll('.endpoint-preview').forEach(endpoint => {
-            endpoint.addEventListener('click', (e) => {
-                // Don't toggle if clicking inside a code block or table
-                if (e.target.closest('.code-block') || e.target.closest('.parameter-table')) {
-                    return;
-                }
-                
-                // Close any other open endpoints
-                document.querySelectorAll('.endpoint-preview.expanded').forEach(openEndpoint => {
-                    if (openEndpoint !== endpoint) {
-                        openEndpoint.classList.remove('expanded');
-                    }
-                });
-                
-                // Toggle current endpoint
-                endpoint.classList.toggle('expanded');
-            });
-        });
-    </script>"""
-
     def generate_html(self, output_path: str) -> None:
         """Generate HTML documentation from the parsed API spec"""
         api_info = self.extract_api_info()
@@ -680,7 +556,6 @@ class APISpecConverter:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{api_info['title']}</title>
     <link rel="stylesheet" href="styles/main.css">
-    <script type="module" src="scripts/main.js"></script>
 </head>
 <body>
     <div class="container">
