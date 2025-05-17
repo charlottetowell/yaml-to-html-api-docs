@@ -4,6 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 import yaml
+import os
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 
@@ -20,6 +21,26 @@ class APISpecConverter:
         self.config = config or ConverterConfig()
         self.spec_data: Dict[str, Any] = {}
     
+    def check_for_logo(self) -> bool:
+        """Check if logo.png exists in the current directory"""
+        return os.path.isfile('logo.png')
+
+    def generate_sidebar_header(self, api_info: Dict[str, Any]) -> str:
+        """Generate the sidebar header with optional logo"""
+        has_logo = self.check_for_logo()
+        
+        logo_html = """
+                <div class="sidebar-logo">
+                    <img src="logo.png" alt="API Documentation Logo">
+                </div>""" if has_logo else ""
+        
+        return f"""
+            <div class="sidebar-header">
+                {logo_html}
+                <h1 class="sidebar-title">API Documentation</h1>
+                <div class="api-version">Version {api_info['version']}</div>
+            </div>"""
+
     def load_spec(self, yaml_path: str) -> None:
         """Load and parse the YAML API specification"""
         try:
@@ -77,10 +98,7 @@ class APISpecConverter:
         
         return f"""
         <div class="sidebar">
-            <div class="sidebar-header">
-                <h1 class="sidebar-title">API Documentation</h1>
-                <div class="api-version">Version {api_info['version']}</div>
-            </div>
+{self.generate_sidebar_header(api_info)}
             <ul class="tags-list">
 {tags_html}
             </ul>

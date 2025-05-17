@@ -80,6 +80,18 @@ body {
     margin-bottom: var(--spacing-md);
 }
 
+.sidebar-logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+.sidebar-logo img {
+    max-width: 100%;
+    height: auto;
+}
+
 .sidebar-title {
     font-size: var(--font-size-large);
     color: var(--primary-color);
