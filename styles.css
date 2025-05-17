@@ -315,28 +315,60 @@ body {
 .endpoint-method {
     min-width: 80px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .endpoint-path {
     font-family: var(--font-mono);
     color: var(--text-primary);
     font-size: var(--font-size-base);
-    flex: 1;
+    flex-shrink: 1;
+    min-width: 200px;
 }
 
 .endpoint-description {
     color: var(--text-secondary);
     font-size: var(--font-size-small);
-    max-width: 50%;
-    white-space: nowrap;
+    flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 150px;
+}
+
+.endpoint-content-type {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    color: var(--text-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--sidebar-background);
+    border-radius: var(--border-radius);
+    flex-shrink: 0;
 }
 
 .endpoint-security-icon {
-    width: 16px;
-    height: 16px;
-    fill: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-left: var(--spacing-md);
+}
+
+.endpoint-security-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--accent-color);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--transition-speed);
+}
+
+.endpoint-preview:hover .endpoint-security-icon svg {
+    transform: scale(1.1);
 }
 
 /* Expanded Endpoint Details */
@@ -388,6 +420,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin: var(--spacing-sm) 0;
+    font-size: var(--font-size-small);
 }
 
 .parameter-table th,
@@ -401,6 +434,7 @@ body {
     font-weight: 600;
     color: var(--text-primary);
     background-color: var(--sidebar-background);
+    white-space: nowrap;
 }
 
 .parameter-table td {
@@ -475,41 +509,6 @@ body {
 
 .parameter-section:last-child {
     margin-bottom: 0;
-}
-
-.endpoint-content-type {
-    font-family: var(--font-mono);
-    font-size: var(--font-size-small);
-    color: var(--text-secondary);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--sidebar-background);
-    border-radius: var(--border-radius);
-    margin-left: var(--spacing-sm);
-}
-
-.parameter-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: var(--spacing-sm) 0;
-    font-size: var(--font-size-small);
-}
-
-.parameter-table th,
-.parameter-table td {
-    padding: var(--spacing-sm);
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.parameter-table th {
-    font-weight: 600;
-    color: var(--text-primary);
-    background-color: var(--sidebar-background);
-    white-space: nowrap;
-}
-
-.parameter-table td {
-    color: var(--text-secondary);
 }
 
 /* Request/Response Schema Styles */

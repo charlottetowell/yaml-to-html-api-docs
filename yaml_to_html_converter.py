@@ -446,7 +446,7 @@ class APISpecConverter:
                 
                 # Check if endpoint has security
                 has_security = bool(details.get('security', []))
-                security_icon = f'<span class="endpoint-security-icon">{self.read_svg_icon("lock")}</span>' if has_security else ''
+                security_icon = f'<span class="endpoint-security-icon" title="This endpoint requires authentication">{self.read_svg_icon("lock")}</span>' if has_security else ''
                 
                 # Get content type
                 content_type = self.format_request_content_type(details)
@@ -462,8 +462,8 @@ class APISpecConverter:
                     <span class="endpoint-method method method-{method.lower()}">{method}</span>
                     <span class="endpoint-path">{path}</span>
                     <span class="endpoint-description">{details.get('summary', '')}</span>
-                    {security_icon}
                     {content_type_html}
+                    {security_icon}
                 </div>
                 <div class="endpoint-details">
                     <div class="endpoint-full-description">{details.get('description', '')}</div>
